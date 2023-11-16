@@ -1,9 +1,8 @@
 import glfw
 from OpenGL.GL import *
 from OpenGL.GLU import *
-import math
 
-# Parameters for the tetrahedron
+# Параметры для тетраэдра
 tetrahedron_vertices = [
     (0.5, -0.5, -0.5),
     (-0.5, -0.5, -0.5),
@@ -17,78 +16,100 @@ tetrahedron_faces = [
     (2, 0, 3)
 ]
 
-# Parameters for the cone (replacing the cylinder)
+# Параметры для конуса
 cone_radius = 0.25
 cone_height = 0.5
 cone_slices = 30
-cone_stacks = 1  # Adjusted stacks for a cone
+cone_stacks = 1
 cone_quadric = gluNewQuadric()
 
-# Rotation angles
-x = 0
-y = 0
-z = 0
+# Углы для вращения
+rotation_x = 0
+rotation_y = 0
+rotation_z = 0
 
+"""
+     Функция draw_tetrahedron() отвечает за отрисовку фигуры тетраэдр. 
+     В функции определяются треугольники и их вершины, используется смешивание цветов с прозрачностью. 
+     RGBA-цвета треугольников устанавливаются с помощью glColor(). 
+     Значения координат каждой вершины умножаются на 0.5 для уменьшения размера тетраэдра в окне.
+"""
 def draw_tetrahedron():
     glEnable(GL_BLEND)
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
     glBegin(GL_TRIANGLES)
-    glColor4f(0.0, 0.0, 1.0, 0.3)
+    glColor4f(0.5, 0.8, 0.7, 0.5)
+
     for face in tetrahedron_faces:
         for vertex_index in face:
             glVertex3fv([coord * 0.5 for coord in tetrahedron_vertices[vertex_index]])
     glEnd()
 
+"""
+     Функция draw_cone() преднаначена для отображения конуса с плавными нормалями,
+     текстурированием и частичной прозрачностью в окне OpenGL.
+     В функции создается объект quadric, используемый для отрисовки геометрических примитивов.
+     RGBA-цвета треугольников устанавливаются с помощью glColor().  
+"""
 def draw_cone():
     glEnable(GL_BLEND)
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
     gluQuadricNormals(cone_quadric, GLU_SMOOTH)
     gluQuadricTexture(cone_quadric, GL_TRUE)
-    glColor4f(1.0, 0.0, 1.0, 0.3)
+    glColor4f(1.0, 0.0, 1.0, 0.5)
+    glTranslatef(0, 0, -0.5)
     gluCylinder(cone_quadric, 0, cone_radius, cone_height, cone_slices, cone_stacks)
     glTranslatef(0, 0, cone_height)
     gluDisk(cone_quadric, 0, cone_radius, cone_slices, 1)
     glDisable(GL_BLEND)
 
+"""
+     Функция display() используется для отображения графики в окне OpenGL.
+     Эта функция отрисовывает тетраэдр и конус в соответствии с установленными 
+     углами вращения и цветами для каждой из фигур.
+"""
 def display():
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
     glLoadIdentity()
-    glRotatef(x, 1, 0, 0)
-    glRotatef(y, 0, 1, 0)
-    glRotatef(z, 0, 0, 1)
+    glRotatef(rotation_x, 1, 0, 0)
+    glRotatef(rotation_y, 0, 1, 0)
+    glRotatef(rotation_z, 0, 0, 1)
 
     glColor3f(1.0, 0.0, 0.0)
     draw_tetrahedron()
 
     glColor3f(0.0, 0.0, 1.0)
-    glTranslatef(0, 0, -cone_height / 2)  # Adjust for cone
     draw_cone()
 
     glfw.swap_buffers(window)
 
+"""
+     Функция key_callback() обрабатывает события нажатия клавиш для вращения сцены, 
+     в частности, изменяет углы вращения в зависимости от нажатой клавиши.
+"""
 def key_callback(_, key, __, action, ___):
-    global x, y, z
+    global rotation_x, rotation_y, rotation_z
 
     if action == glfw.PRESS or action == glfw.REPEAT:
         if key == glfw.KEY_UP:
-            x += 5
+            rotation_x += 5
         elif key == glfw.KEY_DOWN:
-            x -= 5
+            rotation_x -= 5
         elif key == glfw.KEY_LEFT:
-            y -= 5
+            rotation_y -= 5
         elif key == glfw.KEY_RIGHT:
-            y += 5
+            rotation_y += 5
         elif key == glfw.KEY_Z:
-            z += 5
+            rotation_z += 5
         elif key == glfw.KEY_X:
-            z -= 5
+            rotation_z -= 5
 
 def main():
     global window
     if not glfw.init():
         return
 
-    window = glfw.create_window(800, 600, "Intersection of Tetrahedron and Cone", None, None)
+    window = glfw.create_window(800, 600, "Пересечение тетраэдра и конуса", None, None)
     if not window:
         glfw.terminate()
         return
