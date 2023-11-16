@@ -1,5 +1,5 @@
 import glfw
-import pytest as pytest
+import unittest as unittest
 from rotation import draw_tetrahedron, draw_cone
 
 def test_draw_tetrahedron():
@@ -29,4 +29,4 @@ def test_draw_cone():
     glfw.terminate()
 
 if __name__ == "__main__":
-    pytest.main([__file__, '-v'])
+    unittest.main([__file__, '-v'])
