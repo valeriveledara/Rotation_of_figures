@@ -2,7 +2,7 @@
 
 [![License: MIT ](https://img.shields.io/badge/License-MIT-red.svg)](https://opensource.org/licenses/MIT)
 ![Python](https://img.shields.io/badge/Python-3.11.1-green)
-[![Version](https://img.shields.io/badge/Version-1.0.0-darkblue.svg)](https://github.com/Simbirkinaa/Demonstration_of_pendulum_movement)
+[![Version](https://img.shields.io/badge/release-v0.0.1-darkblue.svg)](https://github.com/valeriveledara/Rotation_of_figures)
 [![Telegram](https://img.shields.io/badge/Telegram-bloody_marr-22A5E0?style=social&logo=telegram)](https://t.me/bloody_marr)
 
 
